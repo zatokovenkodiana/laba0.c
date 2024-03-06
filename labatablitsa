@@ -13,6 +13,7 @@ def build_truth_table():
     print("--------------------------------------------")
 
 build_truth_table()
+
 2.
 def build_truth_table():
     print("a | b | c | (a∧¬c)→¬(b↔a)")
@@ -25,3 +26,26 @@ def build_truth_table():
     print("---------------------------")
 
 build_truth_table()
+
+3.
+def build_truth_table(label, expression):
+    print(f"Truth table for expression: {label}")
+    print("x | y | Result")
+    print("--------------")
+    for x in [0, 1]:
+        for y in [0, 1]:
+            result = 1 if eval(expression) else 0
+            print(f"{x} | {y} |   {result}   ")
+    print("--------------")
+
+# Таблица для (x⇒y)(y⇒x)
+build_truth_table("(not x or y) and (not y or x)", "(not x or y) and (not y or x)")
+
+# Таблица для ¬xy∨x¬y
+build_truth_table("not(x and y) or (x and not y)", "not(x and y) or (x and not y)")
+
+# Таблица для x⊕(y⊕x)
+build_truth_table("x != (y != x)", "x != (y != x)")
+
+print("Третье выражение можно упростить до y, так как x⊕(y⊕x) равносильно x⊕y⊕x, исключающее ИЛИ для одинаковых значений равно 0, поэтому упрощается до y")
+

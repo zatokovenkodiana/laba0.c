@@ -49,3 +49,164 @@ build_truth_table("x != (y != x)", "x != (y != x)")
 
 print("Третье выражение можно упростить до y, так как x⊕(y⊕x) равносильно x⊕y⊕x, исключающее ИЛИ для одинаковых значений равно 0, поэтому упрощается до y")
 
+
+4 
+все целиком
+def evaluate1(a, b, c):
+    return int(not(a and b) or (c and a and b <= (not((a and not(c)) == b and c))) and (not a and c and b) or a)
+
+def evaluate2(a, b, c):
+    return int((((a and b and c) == (not((a and b) or (c and b))) or c) <= a and b) <= (not b) and c)
+
+def evaluate3(a, b, c):
+    return int((c and not(a and b <= (not(b and c) and a == b))) <= c or not a)
+
+def evaluate4(b, d, e):
+    return int(((b and not (d and e)) or (d and e)) <= (b and not e) <= (not (d or ((b and d) == (b and (not e) and d)))))
+
+def evaluate5(a, b, c):
+    return int((not(a and b)) or (((not(c and b and a)) == (not(a and (not c) and a))) and not(b and c and a)))
+
+variables = ['a', 'b', 'c']  # или ['a', 'b', 'c', 'd', 'e']
+expressions = [evaluate1, evaluate2, evaluate3, evaluate4, evaluate5]
+expression_strings = [
+    "not(a and b) or (c and a and b <= (not((a and not(c)) == b and c))) and (not a and c and b) or a",
+    "((((a and b and c) == (not((a and b) or (c and b))) or c) <= a and b) <= (not b) and c)",
+    "(c and not(a and b <= (not(b and c) and a == b))) <= c or not a",
+    "((b and not (d and e)) or (d and e)) <= (b and not e) <= (not (d or ((b and d) == (b and (not e) and d))))",
+    "(not(a and b)) or (((not(c and b and a)) == (not(a and (not c) and a))) and not(b and c and a))"
+]
+
+# Создаем таблицы истинности
+for i, (expression, expression_str) in enumerate(zip(expressions, expression_strings), 1):
+    truth_table = []
+    for a in range(2):
+        for b in range(2):
+            for c in range(2):
+                value = [a, b, c, expression(a, b, c)]
+                truth_table.append(value)
+
+    # Вывод результатов
+    print(f"Выражение {i}: {expression_str}")
+    print(" | ".join(variables + ['Результат']))
+    print("-" * (len(" | ".join(variables + ['Результат'])) + 9))
+    for values in truth_table:
+        print(" | ".join(str(value) for value in values))
+    print("\n")
+
+по отдельности
+1) 
+def build_truth_table(expression):
+    variables = ['a', 'b', 'c']
+    num_values = 2 ** len(variables)
+    truth_table = []
+
+    for i in range(num_values):
+        row = []
+        for j in range(len(variables)):
+            row.append((i // (2**j)) % 2)
+        truth_table.append(row)
+
+    for row in truth_table:
+        a, b, c = row
+        result = not(a and b) or (c and a and b <= (not((a and not(c)) == b and c))) and (not a and c and b) or a
+        row.append(int(result))
+
+    print(" | ".join(str(variable) for variable in variables) + " | " + expression)
+    print("-" * (4*len(variables) + len(expression) + 3))
+    for row in truth_table:
+        print(" | ".join(str(el) for el in row))
+
+expression = "¬(a and b) or (c and a and b -> (¬((a and ¬c) == b and c))) and ¬a and c and b or a"
+build_truth_table(expression)
+2)
+def build_truth_table(expression):
+    variables = ['a', 'b', 'c']
+    num_values = 2 ** len(variables)
+    truth_table = []
+
+    for i in range(num_values):
+        row = []
+        for j in range(len(variables)):
+            row.append((i // (2**j)) % 2)
+        truth_table.append(row)
+
+    for row in truth_table:
+        a, b, c = row
+        result = ((((a and b and c) == (not((a and b) or (c and b))) or c) <= a and b) <= (not b) and c)
+        row.append(int(result))
+
+    print(" | ".join(str(variable) for variable in variables) + " | " + expression)
+    print("-" * (4*len(variables) + len(expression) + 3))
+    for row in truth_table:
+        print(" | ".join(str(el) for el in row))
+
+expression = "(((a and b and c) == (not((a and b) or (c and b)) or c) <= a and b) <= (not b) and c)"
+build_truth_table(expression)
+3)
+def build_truth_table(expression):
+    variables = ['a', 'b', 'c']
+    num_values = 2 ** len(variables)
+    truth_table = []
+
+    for i in range(num_values):
+        row = []
+        for j in range(len(variables)):
+            row.append((i // (2**j)) % 2)
+        truth_table.append(row)
+
+    for row in truth_table:
+        a, b, c = row
+        result = (c and not(a and b <= (not(b and c) and a == b))) <= c or not a
+        row.append(int(result))
+
+    print(" | ".join(str(variable) for variable in variables) + " | " + expression)
+    print("-" * (4*len(variables) + len(expression) + 3))
+    for row in truth_table:
+        print(" | ".join(str(el) for el in row))
+
+expression = "(c and b) or not(a and b <= (not(b and c) and a == b)) <= c or not a"
+build_truth_table(expression)
+4)
+def evaluate(b, d, e):
+    return ((b and not (d and e)) or (d and e)) <= (b and not e) <= (not (d or ((b and d)) == (b and (not e) and d)))
+
+variables = ['b', 'd', 'e']
+truth_table = []
+
+# Создаем таблицу истинности
+for b in range(2):
+    for d in range(2):
+        for e in range(2):
+            value = (b, d, e, int(evaluate(b, d, e)))
+            truth_table.append(value)
+
+# Выводим результаты
+print(" | ".join(variables) + " | Result")
+print("-" * (len(" | ".join(variables)) + 9))
+
+for values in truth_table:
+    print(" | ".join(str(value) for value in values[:-1]) + " | " + str(values[-1]))
+5)
+def evaluate(a, b, c):
+    return (not(a and b)) or (((not(c and b and a)) == (not(a and (not c) and a))) and not(b and c and a))
+
+variables = ['a', 'b', 'c']
+truth_table = []
+
+# Создаем таблицу истинности
+for a in range(2):
+    for b in range(2):
+        for c in range(2):
+            value = (a, b, c, int(evaluate(a, b, c)))
+            truth_table.append(value)
+
+# Выводим результаты
+print(" | ".join(variables) + " | Result")
+print("-" * (len(" | ".join(variables)) + 9))
+
+for values in truth_table:
+    print(" | ".join(str(value) for value in values[:-1]) + " | " + str(values[-1]))
+
+
+5. 

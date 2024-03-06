@@ -1,0 +1,14 @@
+def build_truth_table():
+    print(" x | y | z | w | (x∧y)∨(y∧z) | (x⟶w)∧(w⟶z) | Equal?")
+    print("--------------------------------------------")
+    for x in [0, 1]:
+        for y in [0, 1]:
+            for z in [0, 1]:
+                for w in [0, 1]:
+                    left_value = int((x and y) or (y and z))
+                    right_value = int(((not x) or w) and ((not w) or z))
+                    equal = 1 if left_value == right_value else 0
+                    print(f" {x} | {y} | {z} | {w} |      {left_value}      |       {right_value}        |   {equal}")
+    print("--------------------------------------------")
+
+build_truth_table()

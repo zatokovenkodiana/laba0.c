@@ -93,6 +93,42 @@ for i, (expression, expression_str) in enumerate(zip(expressions, expression_str
         print(" | ".join(str(value) for value in values))
     print("\n")
 
+
+def F21(a, b, c):
+    return (not(a and b)) or (c and a and b <= (not((a and not(c)) == b and c))) and (not a and c and b) or a
+
+def F22(a, b, c):
+    return (((a and b and c) == (not((a and b) or (c and b))) or c) <= a and b) <= (not b) and c
+
+def F23(a, b, c):
+    return (c and not(a and b <= (not(b and c) and a == b))) <= c or not a
+
+# Построение таблицы истинности для F21
+print("Таблица истинности для F21:")
+print("a\tb\tc\tF21")
+for a in range(2):
+    for b in range(2):
+        for c in range(2):
+            print(f"{a}\t{b}\t{c}\t{int(F21(a, b, c))}")
+
+# Построение таблицы истинности для F22
+print("\nТаблица истинности для F22:")
+print("a\tb\tc\tF22")
+for a in range(2):
+    for b in range(2):
+        for c in range(2):
+            print(f"{a}\t{b}\t{c}\t{int(F22(a, b, c))}")
+
+# Построение таблицы истинности для F23
+print("\nТаблица истинности для F23:")
+print("a\tb\tc\tF23")
+for a in range(2):
+    for b in range(2):
+        for c in range(2):
+            print(f"{a}\t{b}\t{c}\t{int(F23(a, b, c))}")
+
+
+
 5. 
 def F21(a, b, c):
     return int(not(a and b) or (c and a and b <= (not((a and not(c)) == b and c)) and (not a and c and b) or a))

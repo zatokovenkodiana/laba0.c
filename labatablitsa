@@ -1,165 +1,44 @@
 1.
-def build_truth_table():
-    print(" x | y | z | w | (x∧y)∨(y∧z) | (x⟶w)∧(w⟶z) | Equal?")
-    print("--------------------------------------------")
-    for x in [0, 1]:
-        for y in [0, 1]:
-            for z in [0, 1]:
-                for w in [0, 1]:
-                    left_value = int((x and y) or (y and z))
-                    right_value = int(((not x) or w) and ((not w) or z))
-                    equal = 1 if left_value == right_value else 0
-                    print(f" {x} | {y} | {z} | {w} |      {left_value}      |       {right_value}        |   {equal}")
-    print("--------------------------------------------")
+def calculate_expression(A, B, C):
+    return int(not (A or B) or (A and C))
 
-build_truth_table()
+def print_truth_table():
+    print("A\tB\tC\tF")
+    for A in [0, 1]:
+        for B in [0, 1]:
+            for C in [0, 1]:
+                F = calculate_expression(A, B, C)
+                print(f"{A}\t{B}\t{C}\t{F}")
 
-2.
-def build_truth_table():
-    print("a | b | c | (a∧¬c)→¬(b↔a)")
-    print("---------------------------")
-    for a in [0, 1]:
-        for b in [0, 1]:
-            for c in [0, 1]:
-                left_value = int(not(a and not c)) or int(not(b == a))
-                print(f" {a} | {b} | {c} |        {left_value}         ")
-    print("---------------------------")
+def get_SDNF(truth_table):
+    SDNF_terms = []
+    for key, value in truth_table.items():
+        if value == 1:
+            term = ""
+            if key[0] == 0:
+                term += "¬A"
+            else:
+                term += "A"
+            if key[1] == 0:
+                term += "∨¬B"
+            else:
+                term += "∨B"
+            if key[2] == 0:
+                term += "∨¬C"
+            else:
+                term += "∨C"
+            SDNF_terms.append(term)
+    SDNF = "∧".join(SDNF_terms)
+    return SDNF
 
-build_truth_table()
+truth_table = {}
+for A in [0, 1]:
+    for B in [0, 1]:
+        for C in [0, 1]:
+            F = calculate_expression(A, B, C)
+            truth_table[(A, B, C)] = F
 
-3.
-def build_truth_table(label, expression):
-    print(f"Truth table for expression: {label}")
-    print("x | y | Result")
-    print("--------------")
-    for x in [0, 1]:
-        for y in [0, 1]:
-            result = 1 if eval(expression) else 0
-            print(f"{x} | {y} |   {result}   ")
-    print("--------------")
-
-# Таблица для (x⇒y)(y⇒x)
-build_truth_table("(not x or y) and (not y or x)", "(not x or y) and (not y or x)")
-
-# Таблица для ¬xy∨x¬y
-build_truth_table("not(x and y) or (x and not y)", "not(x and y) or (x and not y)")
-
-# Таблица для x⊕(y⊕x)
-build_truth_table("x != (y != x)", "x != (y != x)")
-
-print("Третье выражение можно упростить до y, так как x⊕(y⊕x) равносильно x⊕y⊕x, исключающее ИЛИ для одинаковых значений равно 0, поэтому упрощается до y")
-
-
-4 
-def evaluate1(a, b, c):
-    return int(not(a and b) or (c and a and b <= (not((a and not(c)) == b and c))) and (not a and c and b) or a)
-
-def evaluate2(a, b, c):
-    return int((((a and b and c) == (not((a and b) or (c and b))) or c) <= a and b) <= (not b) and c)
-
-def evaluate3(a, b, c):
-    return int((c and not(a and b <= (not(b and c) and a == b))) <= c or not a)
-
-def evaluate4(b, d, e):
-    return int(((b and not (d and e)) or (d and e)) <= (b and not e) <= (not (d or ((b and d) == (b and (not e) and d)))))
-
-def evaluate5(a, b, c):
-    return int((not(a and b)) or (((not(c and b and a)) == (not(a and (not c) and a))) and not(b and c and a)))
-
-variables = ['a', 'b', 'c']  # or ['a', 'b', 'c', 'd', 'e']
-expressions = [evaluate1, evaluate2, evaluate3, evaluate4, evaluate5]
-expression_strings = [
-    "not(a and b) or (c and a and b <= (not((a and not(c)) == b and c))) and (not a and c and b) or a",
-    "((((a and b and c) == (not((a and b) or (c and b))) or c) <= a and b) <= (not b) and c)",
-    "(c and not(a and b <= (not(b and c) and a == b))) <= c or not a",
-    "((b and not (d and e)) or (d and e)) <= (b and not e) <= (not (d or ((b and d) == (b and (not e) and d))))",
-    "(not(a and b)) or (((not(c and b and a)) == (not(a and (not c) and a))) and not(b and c and a))"
-]
-
-# Создаем таблицы истинности
-for i, (expression, expression_str) in enumerate(zip(expressions, expression_strings), 21):
-    truth_table = []
-    for a in range(2):
-        for b in range(2):
-            for c in range(2):
-                value = [a, b, c, expression(a, b, c)]
-                truth_table.append(value)
-
-    # Вывод результатов
-    print(f"F{i}: {expression_str}")
-    print(" | ".join(variables + ['Результат']))
-    print("-" * (len(" | ".join(variables + ['Результат'])) + 9))
-    for values in truth_table:
-        print(" | ".join(str(value) for value in values))
-    print("\n")
-
-
-def F21(a, b, c):
-    return (not(a and b)) or (c and a and b <= (not((a and not(c)) == b and c))) and (not a and c and b) or a
-
-def F22(a, b, c):
-    return (((a and b and c) == (not((a and b) or (c and b))) or c) <= a and b) <= (not b) and c
-
-def F23(a, b, c):
-    return (c and not(a and b <= (not(b and c) and a == b))) <= c or not a
-
-# Построение таблицы истинности для F21
-print("Таблица истинности для F21:")
-print("a\tb\tc\tF21")
-for a in range(2):
-    for b in range(2):
-        for c in range(2):
-            print(f"{a}\t{b}\t{c}\t{int(F21(a, b, c))}")
-
-# Построение таблицы истинности для F22
-print("\nТаблица истинности для F22:")
-print("a\tb\tc\tF22")
-for a in range(2):
-    for b in range(2):
-        for c in range(2):
-            print(f"{a}\t{b}\t{c}\t{int(F22(a, b, c))}")
-
-# Построение таблицы истинности для F23
-print("\nТаблица истинности для F23:")
-print("a\tb\tc\tF23")
-for a in range(2):
-    for b in range(2):
-        for c in range(2):
-            print(f"{a}\t{b}\t{c}\t{int(F23(a, b, c))}")
-
-
-
-5. 
-def F21(a, b, c):
-    return int(not(a and b) or (c and a and b <= (not((a and not(c)) == b and c)) and (not a and c and b) or a))
-
-def F22(a, b, c):
-    return int((((a and b and c) == (not((a and b) or (c and b))) or c) <= a and b <= (not b) and c))
-
-def F23(a, b, c):
-    return int((c and not(a and b <= (not(b and c) and a == b))) <= c or not a)
-
-def F24(a, b, c, d, e):
-    return int(((b and not (d and e)) or (d and e)) <= (b and not e) <= (not (d or ((b and d)) == (b and (not e) and d))))
-
-def F25(a, b, c):
-    return int((not(a and b)) or (((not(c and b and a)) == (not(a and (not c) and a))) and not(b and c and a)))
-
-a = int(input("Введите a (0 или 1): "))
-b = int(input("Введите b (0 или 1): "))
-c = int(input("Введите c (0 или 1): "))
-d = int(input("Введите d (0 или 1): "))
-e = int(input("Введите e (0 или 1): "))
-
-
-result_F21 = F21(a, b, c)
-result_F22 = F22(a, b, c)
-result_F23 = F23(a, b, c)
-result_F24 = F24(a, b, c, d, e)
-result_F25 = F25(a, b, c)
-
-print("Результат F21:", result_F21)
-print("Результат F22:", result_F22)
-print("Результат F23:", result_F23)
-print("Результат F24:", result_F24)
-print("Результат F25:", result_F25)
+print_truth_table()
+SDNF = get_SDNF(truth_table)
+print("\nСДНФ для выражения F = ¬(A∨B→AC) :")
+print(SDNF)

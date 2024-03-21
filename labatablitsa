@@ -63,3 +63,32 @@ for D in [0, 1]:
 
 print_truth_table2()
 get_SDNF("(DC∨¬(C→DB))B∨¬(DC↔C∨BC)→B", truth_table2)
+
+
+3. 
+truth_table2 = {}
+for x in [0, 1]:
+    for y in [0, 1]:
+            F = x,y
+            truth_table2[(x, y)] = F
+def print_SKNF_tables():
+    print("СКНФ для первой таблицы: A∨B")
+    print("Вторая таблица соответствует логической операции A⊕B, СКНФ: (A∨B) ∧ (¬A∨¬B)")
+
+print_SKNF_tables()
+
+for key, value in():
+    if value == 1:
+        term = "("
+        if key[0] == 0:
+            term += "¬D"
+        else:
+            term += "D"
+        if key[1] == 0:
+            term += "∨¬B"
+        else:
+            term += "∨B"
+        if key[2] == 0:
+            term += "∨¬C)"
+        else:
+            term += "∨C)"

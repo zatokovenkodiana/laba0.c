@@ -1,4 +1,4 @@
-1 неправильно
+1 
 2.
 def calculate_expression1(D, B, C):
     return int(not (not (D*C or B*D)) or not ((D*B==D*C) or D*B) or B<=C)
